@@ -1,4 +1,4 @@
-package com.learngaadidriver
+package com.LearnGaadiTrainner
 
 import android.app.Application
 import com.facebook.react.PackageList

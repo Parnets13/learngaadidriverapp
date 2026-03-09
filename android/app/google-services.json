@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "865251274740",
+    "project_id": "LearnGaadiTrainner",
+    "storage_bucket": "LearnGaadiTrainner.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:865251274740:android:82fc63d9fc6ac24f7813a1",
+        "android_client_info": {
+          "package_name": "com.LearnGaadiTrainner"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTxWxQsLFwurqUIQ_GCipZdYQ7xFA2JzI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
