@@ -215,9 +215,11 @@ function Register2({navigation, route}) {
           />
           <View>
             <Text style={{color: 'black'}}>By continuing you agree to the</Text>
-            <Text style={{fontWeight: '700', color: 'blue'}}>
-              Terms of Use & Privacy Policy
-            </Text>
+            <TouchableOpacity onPress={() => navigation.navigate('TermsConditions')}>
+              <Text style={{fontWeight: '700', color: 'blue', textDecorationLine: 'underline'}}>
+                Terms of Use & Privacy Policy
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>

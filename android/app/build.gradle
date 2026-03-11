@@ -85,12 +85,12 @@ android {
         versionName "3.0"
     }
     signingConfigs {
-         release {
-        storeFile file(rootProject.file(findProperty("MYAPP_STORE_FILE")))
-        storePassword findProperty("MYAPP_STORE_PASSWORD")
-        keyAlias findProperty("MYAPP_KEY_ALIAS")
-        keyPassword findProperty("MYAPP_KEY_PASSWORD")
-    }
+        release {
+            storeFile file(findProperty("MYAPP_STORE_FILE"))
+            storePassword findProperty("MYAPP_STORE_PASSWORD")
+            keyAlias findProperty("MYAPP_KEY_ALIAS")
+            keyPassword findProperty("MYAPP_KEY_PASSWORD")
+        }
         debug {
             storeFile file('debug.keystore')
             storePassword 'android'

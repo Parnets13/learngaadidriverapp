@@ -231,7 +231,7 @@ export default function Menu({navigation}) {
             </TouchableOpacity> */}
             <TouchableOpacity
               onPress={() => {
-                // navigation.navigate('ChatScreen');
+                navigation.navigate('TermsConditions');
               }}
               style={styles.row}>
               <View style={[styles.rowIcon, {backgroundColor: '#8e8d91'}]}>
@@ -246,7 +246,7 @@ export default function Menu({navigation}) {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                // navigation.navigate('ChatScreen');
+                navigation.navigate('PrivacyPolicy');
               }}
               style={styles.row}>
               <View style={[styles.rowIcon, {backgroundColor: '#8e8d91'}]}>
@@ -261,7 +261,7 @@ export default function Menu({navigation}) {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                // navigation.navigate('ChatScreen');
+                navigation.navigate('Disclaimer');
               }}
               style={styles.row}>
               <View style={[styles.rowIcon, {backgroundColor: '#8e8d91'}]}>

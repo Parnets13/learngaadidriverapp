@@ -29,6 +29,9 @@ import Usertrack from './Usertrack';
 import BookingOtpVerify from './BookingOtpVerify';
 import CompleteRide from './CompleteRide';
 import Abooutus from './Abooutus';
+import TermsConditions from './TermsConditions';
+import PrivacyPolicy from './PrivacyPolicy';
+import Disclaimer from './Disclaimer';
 const Drawer = createDrawerNavigator();
 
 const Stack = createNativeStackNavigator();
@@ -172,6 +175,21 @@ const Navigation = () => {
         <Stack.Screen
           name="Abooutus"
           component={Abooutus}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="TermsConditions"
+          component={TermsConditions}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="PrivacyPolicy"
+          component={PrivacyPolicy}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Disclaimer"
+          component={Disclaimer}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

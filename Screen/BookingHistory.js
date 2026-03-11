@@ -21,6 +21,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import moment from 'moment';
+import API_CONFIG from '../config';
 
 function BookingHistory({navigation}) {
   const [driver, setdriver] = useState({});
@@ -48,28 +49,28 @@ function BookingHistory({navigation}) {
 
   const getBookingByDriverID = () => {
     axios
-      .get('${API_CONFIG.BASE_URL}/user/getDailyBooking')
+      .get(`${API_CONFIG.BASE_URL}/user/getDailyBooking`)
       .then(function (response) {
-        console.log('ghf', response.data.BookingList);
-        setBooking(
-          response.data.BookingList?.filter(
-            item => item?.DriverID === driver?._id,
-          ),
+        console.log('Booking List:', response.data.BookingList);
+        const driverBookings = response.data.BookingList?.filter(
+          item => item?.DriverID === driver?._id,
         );
-        setfilterData(
-          response.data.BookingList?.filter(item => {
-            if (selcted === 'Accepted') {
-              return (
-                item?.Status === 'Accepted' && item?.DriverID === driver?._id
-              );
-            } else {
-              return item?.Status === selcted && item?.DriverID === driver?._id;
-            }
-          }),
-        );
+        setBooking(driverBookings);
+        
+        const filtered = driverBookings?.filter(item => {
+          if (selcted === 'Accepted') {
+            return item?.Status === 'Accepted';
+          } else {
+            return item?.Status === selcted;
+          }
+        });
+        setfilterData(filtered);
       })
       .catch(function (error) {
-        console.log(error);
+        console.log('Booking History Error:', error.message);
+        if (error.response) {
+          console.log('Error Response:', error.response.data);
+        }
       });
   };
 
@@ -113,27 +114,58 @@ function BookingHistory({navigation}) {
         }}>
         <TouchableOpacity onPress={() => setselcted('Accepted')}>
           <View
-            style={{backgroundColor: 'purple', borderRadius: 10, padding: 10}}>
-            <Text style={{color: 'white'}}>Accepted</Text>
+            style={{
+              backgroundColor: selcted === 'Accepted' ? 'purple' : '#e0e0e0',
+              borderRadius: 10,
+              padding: 10,
+              paddingHorizontal: 15,
+            }}>
+            <Text style={{color: selcted === 'Accepted' ? 'white' : '#666', fontWeight: selcted === 'Accepted' ? 'bold' : 'normal'}}>
+              Accepted
+            </Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setselcted('Ongoing')}>
           <View
-            style={{backgroundColor: 'orange', borderRadius: 10, padding: 10}}>
-            <Text style={{color: 'white'}}>Ongoing</Text>
+            style={{
+              backgroundColor: selcted === 'Ongoing' ? 'orange' : '#e0e0e0',
+              borderRadius: 10,
+              padding: 10,
+              paddingHorizontal: 15,
+            }}>
+            <Text style={{color: selcted === 'Ongoing' ? 'white' : '#666', fontWeight: selcted === 'Ongoing' ? 'bold' : 'normal'}}>
+              Ongoing
+            </Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setselcted('Completed')}>
-          <View style={{backgroundColor: 'red', borderRadius: 10, padding: 10}}>
-            <Text style={{color: 'white'}}>Completed</Text>
+          <View
+            style={{
+              backgroundColor: selcted === 'Completed' ? 'red' : '#e0e0e0',
+              borderRadius: 10,
+              padding: 10,
+              paddingHorizontal: 15,
+            }}>
+            <Text style={{color: selcted === 'Completed' ? 'white' : '#666', fontWeight: selcted === 'Completed' ? 'bold' : 'normal'}}>
+              Completed
+            </Text>
           </View>
         </TouchableOpacity>
       </View>
 
       <ScrollView>
-        {filterData?.map(book => (
-          <>
-            {book?.Status === 'Completed' ? (
+        {filterData?.length === 0 ? (
+          <View style={styles.emptyState}>
+            <FontAwesome name="history" size={60} color="#ccc" />
+            <Text style={styles.emptyText}>No {selcted} bookings found</Text>
+            <Text style={styles.emptySubText}>
+              Your booking history will appear here
+            </Text>
+          </View>
+        ) : (
+          filterData?.map((book, index) => (
+            <View key={book?._id || index}>
+              {book?.Status === 'Completed' ? (
               <>
                 <View style={styles.profileV}>
                   <View style={styles.package}>
@@ -223,14 +255,14 @@ function BookingHistory({navigation}) {
                       <Entypo name="location-pin" size={15} />
                       {book?.StartAddress}
                     </Text>
-                    <Image
-                      source={{
-                        uri:
-                          'https://learngaadi-x496.onrender.com/Category/' +
-                          book?.categorie[0]?.catImage,
-                      }}
-                      style={styles.courseimg}
-                    />
+                    {book?.categorie && book?.categorie[0]?.catImage && (
+                      <Image
+                        source={{
+                          uri: `${API_CONFIG.BASE_URL.replace('/api', '')}/Category/${book?.categorie[0]?.catImage}`,
+                        }}
+                        style={styles.courseimg}
+                      />
+                    )}
                     <Text
                       style={{
                         fontWeight: 'bold',
@@ -250,13 +282,13 @@ function BookingHistory({navigation}) {
                   </View>
                 </View>
               </>
-            ) : (
-              <>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate('AllStudentdetails', {item: book})
-                  }>
-                  <View style={styles.profileV}>
+              ) : (
+                <>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('AllStudentdetails', {item: book})
+                    }>
+                    <View style={styles.profileV}>
                     <View style={styles.package}>
                       <Text
                         style={{
@@ -336,14 +368,14 @@ function BookingHistory({navigation}) {
                         <Entypo name="location-pin" size={15} />
                         {book?.StartAddress}
                       </Text>
-                      <Image
-                        source={{
-                          uri:
-                            'https://learngaadi-x496.onrender.com/Category/' +
-                            book?.categorie[0]?.catImage,
-                        }}
-                        style={styles.courseimg}
-                      />
+                      {book?.categorie && book?.categorie[0]?.catImage && (
+                        <Image
+                          source={{
+                            uri: `${API_CONFIG.BASE_URL.replace('/api', '')}/Category/${book?.categorie[0]?.catImage}`,
+                          }}
+                          style={styles.courseimg}
+                        />
+                      )}
                       <Text
                         style={{
                           fontWeight: 'bold',
@@ -358,15 +390,16 @@ function BookingHistory({navigation}) {
                       </Text>
                       {/* <FontAwesome name="car" color="red" size={30} /> */}
                       <Text style={{color: 'gray', textAlign: 'right'}}>
-                        15th April 2024
+                        {moment(book?.createdAt).format('Do MMM YYYY')}
                       </Text>
                     </View>
                   </View>
                 </TouchableOpacity>
               </>
             )}
-          </>
-        ))}
+            </View>
+          ))
+        )}
         {/* <View style={styles.profileV}>
           <View style={styles.package}>
             <Text
@@ -677,6 +710,26 @@ const styles = StyleSheet.create({
     width: 80,
     height: 50,
     borderRadius: 100,
+  },
+  emptyState: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 100,
+    paddingHorizontal: 20,
+  },
+  emptyText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+    marginTop: 20,
+    textAlign: 'center',
+  },
+  emptySubText: {
+    fontSize: 14,
+    color: '#666',
+    marginTop: 10,
+    textAlign: 'center',
   },
   dateV: {
     backgroundColor: '#1e921b',
