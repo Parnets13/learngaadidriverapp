@@ -48,7 +48,7 @@ function BookingHistory({navigation}) {
 
   const getBookingByDriverID = () => {
     axios
-      .get('http://192.168.1.34:8781/api/user/getDailyBooking')
+      .get('${API_CONFIG.BASE_URL}/user/getDailyBooking')
       .then(function (response) {
         console.log('ghf', response.data.BookingList);
         setBooking(
@@ -226,7 +226,7 @@ function BookingHistory({navigation}) {
                     <Image
                       source={{
                         uri:
-                          'http://192.168.1.34:8781/Category/' +
+                          'https://learngaadi-x496.onrender.com/Category/' +
                           book?.categorie[0]?.catImage,
                       }}
                       style={styles.courseimg}
@@ -339,7 +339,7 @@ function BookingHistory({navigation}) {
                       <Image
                         source={{
                           uri:
-                            'http://192.168.1.34:8781/Category/' +
+                            'https://learngaadi-x496.onrender.com/Category/' +
                             book?.categorie[0]?.catImage,
                         }}
                         style={styles.courseimg}

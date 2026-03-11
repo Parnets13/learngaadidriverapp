@@ -104,7 +104,7 @@ function AddTime({navigation}) {
       const config = {
         url: '/driver/driverUpdate3',
         method: 'post',
-        baseURL: 'http://192.168.1.34:8781/api',
+        baseURL: '${API_CONFIG.BASE_URL}',
         // headers: {'content-type': 'multipart/form-data'},
         data: {
           driverId: driver?._id,

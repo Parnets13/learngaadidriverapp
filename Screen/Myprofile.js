@@ -64,7 +64,7 @@ function Myprofile({navigation}) {
           ) : (
             <Image
               source={{
-                uri: 'http://192.168.1.34:8781/Driver/' + driver?.profilepic,
+                uri: 'https://learngaadi-x496.onrender.com/Driver/' + driver?.profilepic,
               }}
               style={styles.image}
             />
@@ -101,14 +101,14 @@ function Myprofile({navigation}) {
                 <Image
                   source={{
                     uri:
-                      'http://192.168.1.34:8781/Driver/' + driver?.Aadharcard,
+                      'https://learngaadi-x496.onrender.com/Driver/' + driver?.Aadharcard,
                   }}
                   style={styles.image1}
                 />
                 <Image
                   source={{
                     uri:
-                      'http://192.168.1.34:8781/Driver/' +
+                      'https://learngaadi-x496.onrender.com/Driver/' +
                       driver?.DrivingLicence,
                   }}
                   style={styles.image1}

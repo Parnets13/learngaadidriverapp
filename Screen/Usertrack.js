@@ -49,7 +49,7 @@ function Usertrack({route, navigation}) {
 
   const getBookingByID = () => {
     axios
-      .get('http://192.168.1.34:8781/api/user/getBooking')
+      .get('${API_CONFIG.BASE_URL}/user/getBooking')
       .then(function (response) {
         setBooking(
           response.data.BookingList?.find(pen => pen?._id === item?._id),
@@ -212,7 +212,7 @@ function Usertrack({route, navigation}) {
       const config = {
         url: '/user/updateDriverAddress',
         method: 'post',
-        baseURL: 'http://192.168.1.34:8781/api',
+        baseURL: '${API_CONFIG.BASE_URL}',
         data: {
           BookingID: item?._id,
           Driverlatitude: latitude,
@@ -295,7 +295,7 @@ function Usertrack({route, navigation}) {
                       <>
                         <Image
                           source={{
-                            uri: `http://192.168.1.34:8781/User/${item?.users[0]?.profilepic}`,
+                            uri: `https://learngaadi-x496.onrender.com/User/${item?.users[0]?.profilepic}`,
                           }}
                           style={{
                             height: 35,
@@ -361,7 +361,7 @@ function Usertrack({route, navigation}) {
           <View style={{flexDirection: 'row', gap: 10}}>
             <Image
               source={{
-                uri: `http://192.168.1.34:8781/User/${item?.users[0]?.profilepic}`,
+                uri: `https://learngaadi-x496.onrender.com/User/${item?.users[0]?.profilepic}`,
               }}
               style={{
                 height: 35,

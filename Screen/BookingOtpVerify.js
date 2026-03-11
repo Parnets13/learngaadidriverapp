@@ -142,7 +142,7 @@ function BookingOtpVerify({route, navigation}) {
     try {
       const config = {
         url: '/user/sendBookingOTP',
-        baseURL: 'http://192.168.1.34:8781/api',
+        baseURL: '${API_CONFIG.BASE_URL}',
         method: 'post',
         hearder: {'content-type': 'application/json'},
         data: {
@@ -165,7 +165,7 @@ function BookingOtpVerify({route, navigation}) {
         const config = {
           url: '/user/verifyBookingOTP',
           method: 'post',
-          baseURL: 'http://192.168.1.34:8781/api',
+          baseURL: '${API_CONFIG.BASE_URL}',
           // headers: {'content-type': 'application/json'},
           data: {
             mobile: item?.users[0]?.mobile,

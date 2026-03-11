@@ -41,7 +41,7 @@ function AllStudentdetails({route, navigation}) {
 
   const getBookingByID = () => {
     axios
-      .get('http://192.168.1.34:8781/api/user/getBooking')
+      .get('${API_CONFIG.BASE_URL}/user/getBooking')
       .then(function (response) {
         setBooking(
           response.data.BookingList?.find(pen => pen?._id === item?._id),
@@ -84,7 +84,7 @@ function AllStudentdetails({route, navigation}) {
       const config = {
         url: '/user/StartDailyBooking',
         method: 'post',
-        baseURL: 'http://192.168.1.34:8781/api',
+        baseURL: '${API_CONFIG.BASE_URL}',
         data: {
           BookingID: item?._id,
           Driverlatitude: latitude,
@@ -170,7 +170,7 @@ function AllStudentdetails({route, navigation}) {
             <Image
               source={{
                 uri:
-                  'http://192.168.1.34:8781/User/' + item?.users[0]?.profilepic,
+                  'https://learngaadi-x496.onrender.com/User/' + item?.users[0]?.profilepic,
               }}
               style={styles.profileAvatar}
             />
@@ -208,7 +208,7 @@ function AllStudentdetails({route, navigation}) {
               <Image
                 source={{
                   uri:
-                    'http://192.168.1.34:8781/Category/' +
+                    'https://learngaadi-x496.onrender.com/Category/' +
                     item?.categorie[0]?.catImage,
                 }}
                 style={styles.courseimg}

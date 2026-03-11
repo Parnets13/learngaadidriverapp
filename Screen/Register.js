@@ -45,10 +45,7 @@ function Register({navigation}) {
     if (inputtxt.match(phoneno)) {
       return true;
     } else {
-      toast.show('You have entered an invalid mobile number!', {
-        type: 'warning',
-        placement: 'top',
-      });
+      alert('You have entered an invalid mobile number!');
       return false;
     }
   }
@@ -65,63 +62,90 @@ function Register({navigation}) {
   let formdata = new FormData();
 
   const driversignup = async () => {
-    if (!profile) {
-      alert('Please select Profile Image');
-    } else if (
-      !name ||
-      !DrivingSchoolName ||
-      !mobile ||
-      !Area ||
-      !City ||
-      !State ||
-      !Country ||
-      !Pincode
-    ) {
-      alert('Please Fill All The Field');
-    } else {
-      try {
-        if (validatename(name) && phonenumbe(mobile)) {
-          formdata.append('profilepic', {
-            name: profile.fileName,
-            type: profile.type,
-            uri:
-              Platform.OS === 'ios'
-                ? profile.uri.replace('file://', '')
-                : profile.uri,
-          });
-          formdata.append('name', name);
-          formdata.append('DrivingSchoolName', DrivingSchoolName);
-          formdata.append('mobile', mobile);
-          formdata.append('Area', Area);
-          formdata.append('City', City);
-          formdata.append('State', State);
-          formdata.append('Country', Country);
-          formdata.append('Pincode', Pincode);
+    if (!name || !DrivingSchoolName || !mobile || !Area || !City || !State || !Country || !Pincode) {
+      alert('Please Fill All The Fields');
+      return;
+    }
+    
+    if (!validatename(name)) {
+      return;
+    }
+    
+    if (!phonenumbe(mobile)) {
+      return;
+    }
+    
+    try {
+      console.log('=== Starting Driver Signup ===');
+      console.log('Profile:', profile?.fileName || 'No profile pic');
+      console.log('Name:', name);
+      console.log('Mobile:', mobile);
+      console.log('School:', DrivingSchoolName);
+      
+      // Only append profile pic if selected
+      if (profile) {
+        formdata.append('profilepic', {
+          name: profile.fileName,
+          type: profile.type,
+          uri: Platform.OS === 'ios' ? profile.uri.replace('file://', '') : profile.uri,
+        });
+      }
+      
+      formdata.append('name', name);
+      formdata.append('DrivingSchoolName', DrivingSchoolName);
+      formdata.append('mobile', mobile);
+      formdata.append('Area', Area);
+      formdata.append('City', City);
+      formdata.append('State', State);
+      formdata.append('Country', Country);
+      formdata.append('Pincode', Pincode);
 
-          const config = {
-            url: '/driver/driverSignup',
-            method: 'post',
-            baseURL: API_CONFIG.BASE_URL,
-            timeout: API_CONFIG.TIMEOUT,
-            headers: {'content-type': 'multipart/form-data'},
-            data: formdata,
-          };
-          let response = await axios(config);
-          if (response.status === 200) {
-            // alert('You have registered successfully with LearnGaadi');
-            navigation.navigate('Register1', {id: response.data.data._id});
-          }
-          if (response.status === 300) {
-            alert(
-              'Entered Mobile No. is already registered. Please try with another Mobile No.',
-            );
-          }
-        }
-      } catch (error) {
-        console.log(error);
-        if (error.response) {
-          alert(error.response.data.error);
-        }
+      console.log('Sending request to:', API_CONFIG.BASE_URL + '/driver/driverSignup');
+      
+      const config = {
+        url: '/driver/driverSignup',
+        method: 'post',
+        baseURL: API_CONFIG.BASE_URL,
+        timeout: API_CONFIG.TIMEOUT,
+        headers: {'content-type': 'multipart/form-data'},
+        data: formdata,
+      };
+      
+      let response = await axios(config);
+      
+      console.log('✅ Response status:', response.status);
+      console.log('Response data:', response.data);
+      
+      if (response.status === 200) {
+        alert('Registration successful! Please continue.');
+        navigation.navigate('Register1', {id: response.data.data._id});
+      }
+    } catch (error) {
+      console.log('=== Signup Error ===');
+      console.log('Error type:', error.name);
+      console.log('Error message:', error.message);
+      
+      if (error.response) {
+        console.log('Response status:', error.response.status);
+        console.log('Response data:', error.response.data);
+        alert(error.response.data.error || 'Registration failed. Please try again.');
+      } else if (error.request) {
+        console.log('❌ No response received - Network Error');
+        console.log('Possible reasons:');
+        console.log('1. Server is sleeping (Render free tier)');
+        console.log('2. No internet connection');
+        console.log('3. Server is down');
+        alert(
+          'Cannot connect to server.\n\n' +
+          'Possible reasons:\n' +
+          '1. Server is waking up (wait 30 seconds)\n' +
+          '2. No internet connection\n' +
+          '3. Server is down\n\n' +
+          'Please try again in a moment.'
+        );
+      } else {
+        console.log('Request setup error:', error.message);
+        alert('Something went wrong. Please try again.');
       }
     }
   };

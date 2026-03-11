@@ -32,7 +32,7 @@ function Notification({navigation}) {
 
   const getNotification = () => {
     axios
-      .get('http://192.168.1.34:8781/api/admin/getNotification')
+      .get('${API_CONFIG.BASE_URL}/admin/getNotification')
       .then(function (response) {
         console.log(response.data.NotificationList);
         setNotifi(

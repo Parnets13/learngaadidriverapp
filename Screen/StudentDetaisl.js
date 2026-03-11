@@ -72,7 +72,7 @@ function StudentDetaisl({navigation, route}) {
         const config = {
           url: '/user/AcceptDailyBooking',
           method: 'post',
-          baseURL: 'http://192.168.1.34:8781/api',
+          baseURL: '${API_CONFIG.BASE_URL}',
           data: {
             BookingID: pending?._id,
             Status: data,
@@ -104,7 +104,7 @@ function StudentDetaisl({navigation, route}) {
       const config = {
         url: '/user/RejectDailyBooking',
         method: 'post',
-        baseURL: 'http://192.168.1.34:8781/api',
+        baseURL: '${API_CONFIG.BASE_URL}',
         data: {
           BookingID: pending?._id,
           DriverID: driver?._id,
@@ -138,7 +138,7 @@ function StudentDetaisl({navigation, route}) {
 
   const getalldriver = () => {
     axios
-      .get('http://192.168.1.34:8781/api/driver/getalldriver')
+      .get('${API_CONFIG.BASE_URL}/driver/getalldriver')
       .then(function (response) {
         // console.log(response.data.driver);
         setdata(
@@ -158,7 +158,7 @@ function StudentDetaisl({navigation, route}) {
 
   const logout = () => {
     axios
-      .get('http://192.168.1.34:8781/api/driver/driverSignout/' + driver?._id)
+      .get('${API_CONFIG.BASE_URL}/driver/driverSignout/' + driver?._id)
       .then(function (response) {
         console.log(response.data.Success);
         alert('Sorry..!, Your blocked from admin');
@@ -231,7 +231,7 @@ function StudentDetaisl({navigation, route}) {
         <Image
           source={{
             uri:
-              'http://192.168.1.34:8781/User/' + pending?.users[0]?.profilepic,
+              'https://learngaadi-x496.onrender.com/User/' + pending?.users[0]?.profilepic,
           }}
           style={styles.profileAvatar}
         />
@@ -302,7 +302,7 @@ function StudentDetaisl({navigation, route}) {
           <Image
             source={{
               uri:
-                'http://192.168.1.34:8781/Category/' +
+                'https://learngaadi-x496.onrender.com/Category/' +
                 pending?.categorie[0]?.catImage,
             }}
             style={styles.courseimg}

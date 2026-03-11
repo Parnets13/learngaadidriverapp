@@ -136,6 +136,11 @@ function Home({navigation}) {
   const [Booking, setBooking] = useState([]);
 
   const getBookingForDrivers = () => {
+    if (!driver?._id) {
+      console.log('⚠️ Driver not logged in, skipping booking fetch');
+      return;
+    }
+    
     console.log('Fetching bookings for driver...');
 
     axios
@@ -247,6 +252,11 @@ function Home({navigation}) {
   }, [driver]);
 
   const getalldriver = () => {
+    if (!driver?._id) {
+      console.log('⚠️ Driver not logged in, skipping driver data fetch');
+      return;
+    }
+    
     axios
       .get(`${API_CONFIG.BASE_URL}/driver/getalldriver`)
       .then(async function (response) {

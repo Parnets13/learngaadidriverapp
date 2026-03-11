@@ -26,27 +26,27 @@ apiClient.interceptors.request.use(
 // Add response interceptor for error handling
 apiClient.interceptors.response.use(
   response => {
-    console.log('API Success:', response.status, response.config.url);
+    console.log('✅ API Success:', response.status, response.config.url);
     return response;
   },
   error => {
     if (error.response) {
       // Server responded with error status
-      console.log('API Error:', `Request failed with status code ${error.response.status}`);
-      console.log('Error details:', error.response.data);
-      console.log('Request URL:', error.config.url);
+      console.log('❌ API Error:', `Request failed with status code ${error.response.status}`);
+      console.log('📍 Request URL:', error.config?.baseURL + error.config?.url);
+      console.log('📄 Error details:', error.response.data);
     } else if (error.request) {
       // Request made but no response
-      console.log('API Error: Network Error');
-      console.log('No response received from server');
-      console.log('Request URL:', error.config?.url);
+      console.log('❌ API Error: Network Error');
+      console.log('📍 Request URL:', error.config?.baseURL + error.config?.url);
+      console.log('⚠️ No response received from server');
       console.log('Possible reasons:');
       console.log('1. Server is down or sleeping (Render free tier)');
       console.log('2. Network connection issue');
       console.log('3. Request timeout (current:', API_CONFIG.TIMEOUT / 1000, 'seconds)');
     } else {
       // Error in request setup
-      console.log('API Error:', error.message);
+      console.log('❌ API Error:', error.message);
     }
     return Promise.reject(error);
   }

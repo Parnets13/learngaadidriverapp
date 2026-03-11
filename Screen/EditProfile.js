@@ -84,7 +84,7 @@ function EditProfile({navigation}) {
 
   const getCategory = () => {
     axios
-      .get('http://192.168.1.34:8781/api/admin/getCategory')
+      .get('${API_CONFIG.BASE_URL}/admin/getCategory')
       .then(function (response) {
         // console.log(response.data.CategoryList);
         setCategory(response.data.CategoryList);
@@ -152,7 +152,7 @@ function EditProfile({navigation}) {
       const config = {
         url: '/driver/editprofile',
         method: 'post',
-        baseURL: 'http://192.168.1.34:8781/api',
+        baseURL: '${API_CONFIG.BASE_URL}',
         headers: {'content-type': 'multipart/form-data'},
         data: formdata,
       };
@@ -194,7 +194,7 @@ function EditProfile({navigation}) {
           ) : (
             <Image
               source={{
-                uri: 'http://192.168.1.34:8781/Driver/' + driver?.profilepic,
+                uri: 'https://learngaadi-x496.onrender.com/Driver/' + driver?.profilepic,
               }}
               style={styles.image}
             />
@@ -317,7 +317,7 @@ function EditProfile({navigation}) {
                       <Image
                         source={{
                           uri:
-                            'http://192.168.1.34:8781/Driver/' +
+                            'https://learngaadi-x496.onrender.com/Driver/' +
                             driver?.Aadharcard,
                         }}
                         style={styles.image}
@@ -359,7 +359,7 @@ function EditProfile({navigation}) {
                       <Image
                         source={{
                           uri:
-                            'http://192.168.1.34:8781/Driver/' +
+                            'https://learngaadi-x496.onrender.com/Driver/' +
                             driver?.DrivingLicence,
                         }}
                         style={styles.image}

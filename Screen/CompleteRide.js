@@ -166,7 +166,7 @@ function CompleteRide({route, navigation}) {
         const config = {
           url: '/user/CompleteTraning',
           method: 'post',
-          baseURL: 'http://192.168.1.34:8781/api',
+          baseURL: '${API_CONFIG.BASE_URL}',
           data: {
             BookingID: item?.MainBookingId,
             TrainingTime: TrainingTime,
@@ -201,7 +201,7 @@ function CompleteRide({route, navigation}) {
         const config = {
           url: '/user/StartTraining',
           method: 'post',
-          baseURL: 'http://192.168.1.34:8781/api',
+          baseURL: '${API_CONFIG.BASE_URL}',
           data: {
             BookingID: item?.MainBookingId,
             DailyBookingID: item?._id,

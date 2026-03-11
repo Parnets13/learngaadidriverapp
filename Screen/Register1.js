@@ -15,6 +15,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import {Picker} from '@react-native-picker/picker';
 import axios from 'axios';
 import {useFocusEffect} from '@react-navigation/native';
+import API_CONFIG from '../config';
 
 function Register1({navigation, route}) {
   const {id} = route.params;
@@ -34,13 +35,16 @@ function Register1({navigation, route}) {
 
   const getCategory = () => {
     axios
-      .get('http://192.168.1.34:8781/api/admin/getCategory')
+      .get(`${API_CONFIG.BASE_URL}/admin/getCategory`)
       .then(function (response) {
-        // console.log(response.data.CategoryList);
+        console.log('Categories loaded:', response.data.CategoryList?.length);
         setCategory(response.data.CategoryList);
       })
       .catch(function (error) {
-        console.log(error);
+        console.log('Error loading categories:', error.message);
+        if (error.response) {
+          console.log('Error details:', error.response.data);
+        }
       });
   };
 
@@ -52,7 +56,8 @@ function Register1({navigation, route}) {
         const config = {
           url: '/driver/driverUpdate1',
           method: 'post',
-          baseURL: 'http://192.168.1.34:8781/api',
+          baseURL: API_CONFIG.BASE_URL,
+          timeout: API_CONFIG.TIMEOUT,
           data: {
             driverId: id,
             VehicalType: VehicalType,
@@ -73,7 +78,7 @@ function Register1({navigation, route}) {
     }
   };
 
-  console.log('Category', Category);
+  console.log('Selected Vehicle Type:', VehicalType);
   return (
     <View style={styles.container}>
       <StatusBar
@@ -90,8 +95,12 @@ function Register1({navigation, route}) {
               selectedValue={VehicalType}
               onValueChange={VehicalType => setVehicalType(VehicalType)}>
               <Picker.Item label="Select Vehicle Type" value="" />
-              {Category?.map(cat => (
-                <Picker.Item label={cat?.catName} value={cat?.catName} />
+              {Category?.map((cat, index) => (
+                <Picker.Item 
+                  key={cat?._id || index} 
+                  label={cat?.catName} 
+                  value={cat?.catName} 
+                />
               ))}
             </Picker>
             <TextInput

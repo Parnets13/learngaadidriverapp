@@ -8,6 +8,7 @@ import {
   ImageBackground,
   TextInput,
   ScrollView,
+  Platform,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Avatar, IconButton} from 'react-native-paper';
@@ -15,11 +16,12 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import {AadharcardImage} from '../assets/Image/Dl.jpg';
 import CheckBox from 'react-native-check-box';
 import axios from 'axios';
+import API_CONFIG from '../config';
 
 function Register2({navigation, route}) {
   const {id} = route.params;
 
-  console.log('id', id);
+  console.log('Driver ID:', id);
   const [Aadharcard, setAadharcard] = useState();
 
   const handleChooseAadharcard = () => {
@@ -48,47 +50,76 @@ function Register2({navigation, route}) {
   const driverUpdate2 = async () => {
     if (!isChecked) {
       alert('Please read the terms of conditions & Privacy policy');
-    } else if (!Aadharcard) {
+      return;
+    }
+    
+    if (!Aadharcard) {
       alert('Please upload Aadharcard');
-    } else if (!DrivingLicence) {
+      return;
+    }
+    
+    if (!DrivingLicence) {
       alert('Please upload Driving Licence');
-    } else {
-      try {
-        formdata.append('Aadharcard', {
-          name: Aadharcard.fileName,
-          type: Aadharcard.type,
-          uri:
-            Platform.OS === 'ios'
-              ? Aadharcard.uri.replace('file://', '')
-              : Aadharcard.uri,
-        });
-        formdata.append('DrivingLicence', {
-          name: DrivingLicence.fileName,
-          type: DrivingLicence.type,
-          uri:
-            Platform.OS === 'ios'
-              ? DrivingLicence.uri.replace('file://', '')
-              : DrivingLicence.uri,
-        });
-        formdata.append('driverId', id);
+      return;
+    }
+    
+    try {
+      console.log('=== Uploading Documents ===');
+      console.log('Driver ID:', id);
+      console.log('Aadhar:', Aadharcard?.fileName);
+      console.log('DL:', DrivingLicence?.fileName);
+      
+      formdata.append('Aadharcard', {
+        name: Aadharcard.fileName,
+        type: Aadharcard.type,
+        uri: Platform.OS === 'ios' ? Aadharcard.uri.replace('file://', '') : Aadharcard.uri,
+      });
+      formdata.append('DrivingLicence', {
+        name: DrivingLicence.fileName,
+        type: DrivingLicence.type,
+        uri: Platform.OS === 'ios' ? DrivingLicence.uri.replace('file://', '') : DrivingLicence.uri,
+      });
+      formdata.append('driverId', id);
 
-        const config = {
-          url: '/driver/driverUpdate2',
-          method: 'post',
-          baseURL: 'http://192.168.1.34:8781/api',
-          headers: {'content-type': 'multipart/form-data'},
-          data: formdata,
-        };
-        let response = await axios(config);
-        if (response.status === 200) {
-          alert('You have registered successfully with LearnGaadi');
-          navigation.navigate('Otplogin');
-        }
-      } catch (error) {
-        console.log(error);
-        if (error.response) {
-          alert(error.response.data.error);
-        }
+      console.log('Sending to:', API_CONFIG.BASE_URL + '/driver/driverUpdate2');
+      
+      const config = {
+        url: '/driver/driverUpdate2',
+        method: 'post',
+        baseURL: API_CONFIG.BASE_URL,
+        timeout: API_CONFIG.TIMEOUT,
+        headers: {'content-type': 'multipart/form-data'},
+        data: formdata,
+      };
+      
+      let response = await axios(config);
+      
+      console.log('✅ Response:', response.status);
+      
+      if (response.status === 200) {
+        alert('You have registered successfully with LearnGaadi');
+        navigation.navigate('Otplogin');
+      }
+    } catch (error) {
+      console.log('=== Upload Error ===');
+      console.log('Error:', error.message);
+      
+      if (error.response) {
+        console.log('Status:', error.response.status);
+        console.log('Data:', error.response.data);
+        alert(error.response.data.error || 'Upload failed. Please try again.');
+      } else if (error.request) {
+        console.log('❌ Network Error - No response');
+        alert(
+          'Cannot connect to server.\n\n' +
+          'Please check:\n' +
+          '1. Internet connection\n' +
+          '2. Server might be sleeping\n\n' +
+          'Try again in a moment.'
+        );
+      } else {
+        console.log('Error:', error.message);
+        alert('Something went wrong. Please try again.');
       }
     }
   };
