@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   ImageBackground,
   TextInput,
+  Platform,
+  PermissionsAndroid,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {
@@ -20,6 +22,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import API_CONFIG from '../config';
 
 function VerifyOtp({navigation}) {
   const CELL_COUNT = 6;
@@ -153,8 +156,8 @@ function VerifyOtp({navigation}) {
         const config = {
           url: '/driver/verifyotp',
           method: 'post',
-          baseURL: 'http://192.168.1.34:8781/api',
-          // headers: {'content-type': 'application/json'},
+          baseURL: API_CONFIG.BASE_URL,
+          timeout: API_CONFIG.TIMEOUT,
           data: {
             mobile: mobile,
             otp: value,
@@ -177,9 +180,11 @@ function VerifyOtp({navigation}) {
           }
         }
       } catch (error) {
-        console.log(error.response);
+        console.log('Verify OTP Error:', error.message);
         if (error.response) {
           alert(error.response.data.error);
+        } else {
+          alert('Network error. Please check your connection.');
         }
       }
     }
@@ -190,22 +195,23 @@ function VerifyOtp({navigation}) {
       const config = {
         url: '/driver/sendotp',
         method: 'post',
-        baseURL: 'http://192.168.1.34:8781/api',
-        // headers: {'content-type': 'application/json'},
+        baseURL: API_CONFIG.BASE_URL,
+        timeout: API_CONFIG.TIMEOUT,
         data: {
           mobile: mobile,
         },
       };
       let res = await axios(config);
       if (res.status === 200) {
-        console.log(res.data);
-        console.log(res.data.otp);
-        alert('OTP sent to your mobile number');
+        console.log('Resend OTP:', res.data.otp);
+        alert(`OTP sent to your mobile number: ${res.data.otp}`);
       }
     } catch (error) {
-      console.log(error.response);
+      console.log('Resend OTP Error:', error.message);
       if (error.response) {
         alert(error.response.data.error);
+      } else {
+        alert('Network error. Please check your connection.');
       }
     }
   };

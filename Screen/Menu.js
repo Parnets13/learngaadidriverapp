@@ -21,6 +21,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import {useFocusEffect} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import API_CONFIG from '../config';
 
 export default function Menu({navigation}) {
   const [form, setForm] = useState({
@@ -44,7 +45,7 @@ export default function Menu({navigation}) {
 
   const logOut = () => {
     axios
-      .get('http://192.168.1.34:8781/api/driver/driverSignout/' + driver?._id)
+      .get(`${API_CONFIG.BASE_URL}/driver/driverSignout/${driver?._id}`)
       .then(function (response) {
         console.log(response.data.Success);
         alert(response.data.Success);
@@ -67,7 +68,7 @@ export default function Menu({navigation}) {
             }}>
             <Image
               source={{
-                uri: 'http://192.168.1.34:8781/Driver/' + driver?.profilepic,
+                uri: `${API_CONFIG.BASE_URL.replace('/api', '')}/Driver/${driver?.profilepic}`,
               }}
               style={styles.profileAvatar}
             />

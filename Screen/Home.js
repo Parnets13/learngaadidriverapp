@@ -18,6 +18,7 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 import {useFocusEffect} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import API_CONFIG from '../config';
 import Geolocation from '@react-native-community/geolocation';
 import {BackHandler} from 'react-native';
 
@@ -85,7 +86,7 @@ function Home({navigation}) {
       const config = {
         url: '/driver/editduty',
         method: 'post',
-        baseURL: 'http://192.168.1.34:8781/api',
+        baseURL: API_CONFIG.BASE_URL,
         data: {driverID: driver?._id, DriverDuty: isEnabled},
       };
       let response = await axios(config);
@@ -135,10 +136,10 @@ function Home({navigation}) {
   const [Booking, setBooking] = useState([]);
 
   const getBookingForDrivers = () => {
-    console.log('ghh');
+    console.log('Fetching bookings for driver...');
 
     axios
-      .get('http://192.168.1.34:8781/api/user/getDailyBooking')
+      .get(`${API_CONFIG.BASE_URL}/user/getDailyBooking`)
       .then(function (response) {
         // console.log('asfd', response.data.BookingList);
         setBooking(
@@ -180,7 +181,7 @@ function Home({navigation}) {
         const config = {
           url: '/user/AcceptDailyBooking',
           method: 'post',
-          baseURL: 'http://192.168.1.34:8781/api',
+          baseURL: API_CONFIG.BASE_URL,
           data: {
             BookingID: pending?._id,
             DriverID: driver?._id,
@@ -213,7 +214,7 @@ function Home({navigation}) {
       const config = {
         url: '/user/RejectDailyBooking',
         method: 'post',
-        baseURL: 'http://192.168.1.34:8781/api',
+        baseURL: API_CONFIG.BASE_URL,
         data: {
           BookingID: pending?._id,
           DriverID: driver?._id,
@@ -247,7 +248,7 @@ function Home({navigation}) {
 
   const getalldriver = () => {
     axios
-      .get('http://192.168.1.34:8781/api/driver/getalldriver')
+      .get(`${API_CONFIG.BASE_URL}/driver/getalldriver`)
       .then(async function (response) {
         // console.log(response.data.driver);
         const xyz = response.data.driver?.filter(
@@ -269,7 +270,7 @@ function Home({navigation}) {
 
   const logout = () => {
     axios
-      .get('http://192.168.1.34:8781/api/driver/driverSignout/' + driver?._id)
+      .get(`${API_CONFIG.BASE_URL}/driver/driverSignout/${driver?._id}`)
       .then(function (response) {
         console.log(response.data.Success);
         alert('Sorry..!, Your blocked from admin');

@@ -8,11 +8,13 @@ import {
   ImageBackground,
   TextInput,
   ScrollView,
+  Platform,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Avatar, IconButton} from 'react-native-paper';
 import {launchImageLibrary} from 'react-native-image-picker';
 import axios from 'axios';
+import API_CONFIG from '../config';
 
 function Register({navigation}) {
   const [profile, setprofile] = useState();
@@ -99,7 +101,8 @@ function Register({navigation}) {
           const config = {
             url: '/driver/driverSignup',
             method: 'post',
-            baseURL: 'http://192.168.1.34:8781/api',
+            baseURL: API_CONFIG.BASE_URL,
+            timeout: API_CONFIG.TIMEOUT,
             headers: {'content-type': 'multipart/form-data'},
             data: formdata,
           };
